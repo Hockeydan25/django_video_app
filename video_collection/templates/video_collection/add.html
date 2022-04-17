@@ -9,13 +9,13 @@
     <li>{{ mesaage }}</li>
 {% endfor %}    
 
-    <form method="POST" action="{% url 'add_video' %}">
+<form method="POST" action="{% url 'add_video' %}">
     
-        {% csrf_token %}
-        {{ new_video_form }} 
-        <!-- watch the format here -->
-        <button type="submit">Add new video</button>
+{% csrf_token %}
+{{ new_video_form }} 
+<!-- watch the format here -->
+ <button type="submit">Add new video</button>
 
-    </form>
+</form>
 
 {% endblock %}

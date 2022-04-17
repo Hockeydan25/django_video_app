@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.contrib import messages
+from .models import Video
 from .forms import VideoForm
+from django.contrib import messages
 
 
 """
@@ -12,10 +13,10 @@ def home(request):
     return render(request, 'video_collection/home.html', {'app_name': app_name})  # key and value
 
 def add(request):
-    if request.method == 'POST':
+    if request.method == 'POST':  # adding a new video
         new_video_form = VideoForm(request.POST)  # what is this?
         if new_video_form.is_valid():
-            new_video_form.save()
+            new_video_form.save()  # saves creates video object that contains the video url?
             messages.info(request, 'New video was saved!')
             # todo show sucess or redirect to list of videos
         else:
