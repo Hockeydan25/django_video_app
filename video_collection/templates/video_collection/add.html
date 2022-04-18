@@ -2,20 +2,17 @@
 
 {% block content %}
 
-
 <h2>Add New Video</h2>
 
 {% for message in messages %}
-    <li>{{ mesaage }}</li>
+    <li>{{ message }}</li>
 {% endfor %}    
 
-<form method="POST" action="{% url 'add_video' %}">
-    
-{% csrf_token %}
-{{ new_video_form }} 
-<!-- watch the format here -->
- <button type="submit">Add new video</button>
-
+<form method="POST" action="{% url 'add_video' %}">    
+    {% csrf_token %}
+    {{ new_video_form }} 
+    <!-- watch the format here -->
+    <button type="submit">Add new video</button>
 </form>
 
 {% endblock %}

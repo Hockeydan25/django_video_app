@@ -1,4 +1,6 @@
+from urllib import parse
 from django.db import models
+from django.forms import ValidationError
 
 """ 
 Create your models here. name, url(youtube only), notes, add video button and some links.
@@ -9,8 +11,29 @@ class Video(models.Model):
     name = models.CharField(max_length=250)  # database constriants
     url = models.CharField(max_length=400)  # longer for urls they can be lengthy.
     notes = models.TextField(blank=True, null=True)  # blank notes are optional so True, allows null value
-    # creates string on page 
+    video_id = models.CharField(max_length=40, unique=True)
+
+
+    def save(self, *args, **kwargs):
+
+        # extracts the video id from a youtube url does not gaurentee.
+        if not self.url.startswith('https://www.youtube.com/watch'):
+            raise ValidationError(f'Hi, check your URL link, please use a YouTube URL {self.url}')
+
+        url_components = parse.urlparse(self.url)
+        query_string = url_components.query  # the v is in a youtube video 'v=10988776'/ a list.   
+        if not query_string:
+            raise ValidationError('Invalid YouTube URL {self.url}')  # dictionary format.
+        parameters = parse.parse_qs(query_string,  strict_parsing=True)  # database sqlite command.
+        v_paramters_catelog = parameters.get('v')  # return None if no key found, ie.. abc=1234. we need to deal with None.
+        if not v_paramters_catelog:  # check for None or empty list.
+            raise ValidationError(f'Invalida YouTube URL, missing parameters {self.url}') 
+        self.video_id =v_paramters_catelog[0]  #string v.
+
+        super().save(*args, **kwargs)
+
+
     def __str__(self) -> str:  
-        return f'ID: {self.pk}, Name: {self.name}, URL: {self.url}, Notes: {self.notes[:200]}'  # notes limited[:200] 
+        return f'ID: {self.pk}, Name: {self.name}, URL: {self.url}, Video ID: {self.video_id} ,Notes: {self.notes[:200]}'  # notes limited[:200] 
 
 

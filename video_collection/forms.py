@@ -8,3 +8,4 @@ class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
         fields = ['name', 'url', 'notes']  # need to match models
+        
