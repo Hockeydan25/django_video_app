@@ -2,3 +2,12 @@ body {
     background-color: aquamarine ;
 
 }
+
+.navigation {
+    margin: 10px;
+}
+
+.navigation > a {
+    color: rgb(3, 32, 57);
+    padding-right: 30px;
+}

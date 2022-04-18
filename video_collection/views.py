@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from .forms import VideoForm
+from django.db.models.functions import Lower
+from .forms import SearchFrom, VideoForm
 from .models import Video
+
 
 
 """
@@ -36,5 +38,17 @@ def add(request):
     return render(request, 'video_collection/add.html', {'new_video_form': new_video_form})
 
 def video_catelog(request):  # video catelog used instead of video_list, function
-    videos = Video.objects.all()
-    return render(request, 'video_collection/video_catelog.html', {'videos': videos})
+
+    search_form = SearchFrom(request.GET)  # build form from data use has sent to the app
+
+    if search_form.is_valid():
+        print(search_form)
+        search_term = search_form.cleaned_data['search_term']  # user sent data music video 'soundgarden' or 'jon spencer'
+        videos = Video.objects.filter(name__icontains=search_term).order_by(Lower('name'))  # add sorting lower order
+
+    else:  # fomr is not valid in or this is the first time the user sees the page.
+        search_form = SearchFrom()  # calls the method from forms
+        videos = Video.objects.order_by(Lower('name'))  # add sorting lower order
+
+    return render(request, 'video_collection/video_catelog.html', {'videos': videos, 'search_form': search_form})
+ 
