@@ -17,10 +17,21 @@ class Video(models.Model):
     def save(self, *args, **kwargs):
 
         # extracts the video id from a youtube url does not gaurentee.
-        if not self.url.startswith('https://www.youtube.com/watch'):
+        # if not self.url.startswith('https://www.youtube.com/watch'):
+        #     raise ValidationError(f'Hi, check your URL link, please use a YouTube URL {self.url}')
+        url_components = parse.urlparse(self.url)
+
+        #new validation checks 
+        if url_components.scheme != 'https':
             raise ValidationError(f'Hi, check your URL link, please use a YouTube URL {self.url}')
 
-        url_components = parse.urlparse(self.url)
+        if url_components.netloc != 'www.youtube.com':
+            raise ValidationError(f'Hi, check your URL link, please use a YouTube URL {self.url}')
+
+        if url_components.path != '/watch':
+            raise ValidationError(f'Hi, check your URL link, please use a YouTube URL {self.url}')    
+
+
         query_string = url_components.query  # the v is in a youtube video 'v=10988776'/ a list.   
         if not query_string:
             raise ValidationError('Invalid YouTube URL {self.url}')  # dictionary format.

@@ -22,7 +22,7 @@ def add(request):
         if new_video_form.is_valid():
             try:
                 new_video_form.save()  # saves creates video object that contains the video url?
-                return redirect('video_catelog')
+                return redirect('video_catalog')
                 #messages.info(request, 'New video was saved!')
                 # todo show sucess or redirect to list of videos
             except ValidationError:
@@ -37,7 +37,7 @@ def add(request):
     new_video_form = VideoForm() # this is going to use forms for our new video so when you add it you can fill out.   
     return render(request, 'video_collection/add.html', {'new_video_form': new_video_form})
 
-def video_catelog(request):  # video catelog used instead of video_list, function
+def video_catalog(request):  # video catelog used instead of video_list, function
 
     search_form = SearchFrom(request.GET)  # build form from data use has sent to the app
 
@@ -50,5 +50,5 @@ def video_catelog(request):  # video catelog used instead of video_list, functio
         search_form = SearchFrom()  # calls the method from forms
         videos = Video.objects.order_by(Lower('name'))  # add sorting lower order
 
-    return render(request, 'video_collection/video_catelog.html', {'videos': videos, 'search_form': search_form})
+    return render(request, 'video_collection/video_catalog.html', {'videos': videos, 'search_form': search_form})
  

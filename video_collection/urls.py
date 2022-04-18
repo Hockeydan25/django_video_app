@@ -9,5 +9,5 @@ don't forget comma's we adding paths.
 urlpatterns = [    
     path('', views.home, name='home'),
     path('add', views.add, name='add_video' ),  # will end up with a button, submit type
-    path('video_catelog', views.video_catelog, name='video_catelog' )  # using category instead of list. 
+    path('video_catalog', views.video_catalog, name='video_catalog' )  # using category instead of list. 
 ]
