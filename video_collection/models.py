@@ -7,14 +7,14 @@ Create your models here. name, url(youtube only), notes, add video button and so
 don't for get about migrations when creating new models to add in the table to the database with it's constriants. 
 """
 
-class Video(models.Model):
+class Video(models.Model):  # superclass 
     name = models.CharField(max_length=250)  # database constriants
     url = models.CharField(max_length=400)  # longer for urls they can be lengthy.
     notes = models.TextField(blank=True, null=True)  # blank notes are optional so True, allows null value
     video_id = models.CharField(max_length=40, unique=True)
 
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):  # save function. args arguments, kwargs key word arguments.
 
         # extracts the video id from a youtube url does not gaurentee.
         # if not self.url.startswith('https://www.youtube.com/watch'):
@@ -41,7 +41,8 @@ class Video(models.Model):
             raise ValidationError(f'Invalida YouTube URL, missing parameters {self.url}') 
         self.video_id =v_paramters_catelog[0]  #string v.
 
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  
+        # superclass save function calling the model.Model method - overwrites save function with Models save().
 
 
     def __str__(self) -> str:  
